@@ -28,7 +28,8 @@ from common.torch.ops import default_device, to_tensor
 
 
 @gin.configurable
-def trainer(model: t.nn.Module,
+def trainer(snapshot_manager: SnapshotManager,
+            model: t.nn.Module,
             training_set: Iterator,
             timeseries_frequency: int,
             loss_name: str,
@@ -50,8 +51,7 @@ def trainer(model: t.nn.Module,
     #
     # Training Loop
     #
-    #snapshot_manager.enable_time_tracking()
-    losses = []
+    snapshot_manager.enable_time_tracking()
     for i in range(iteration + 1, iterations + 1):
         model.train()
         x, x_mask, y, y_mask = map(to_tensor, next(training_set))
@@ -68,12 +68,12 @@ def trainer(model: t.nn.Module,
 
         for param_group in optimizer.param_groups:
             param_group["lr"] = learning_rate * 0.5 ** (i // lr_decay_step)
-        losses.append(training_loss)
-        #snapshot_manager.register(iteration=i,
-        #                          training_loss=float(training_loss),
-        #                          validation_loss=np.nan, model=model,
-        #                          optimizer=optimizer)
-    return model, losses
+
+        snapshot_manager.register(iteration=i,
+                                  training_loss=float(training_loss),
+                                  validation_loss=np.nan, model=model,
+                                  optimizer=optimizer)
+    return model
 
 
 def __loss_fn(loss_name: str):

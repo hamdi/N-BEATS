@@ -86,7 +86,8 @@ class Experiment(ABC):
             # write command file
             command_file = os.path.join(instance_path, 'command')
             with open(command_file, 'w') as cmd:
-                cmd.write(f'python {sys.modules["__main__"].__file__} '
+                cmd.write(f'python /home/hamdi/Desktop/Projects/MLTS/N-BEATS/experiments/m3/main.py '
+                #cmd.write(f'python {sys.modules["__main__"].__file__} '
                           f'--config_path={instance_config_path} '
                           f'run >> {instance_path}/instance.log 2>&1')
 

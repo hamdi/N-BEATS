@@ -35,8 +35,8 @@ class SnapshotManager:
     def __init__(self,
                  snapshot_dir: str,
                  total_iterations: int,
-                 logging_frequency: int = 100,
-                 snapshot_frequency: int = 1000):
+                 logging_frequency: int = 10000,
+                 snapshot_frequency: int = 100000):
         self.model_snapshot_file = os.path.join(snapshot_dir, 'model')
         self.optimizer_snapshot_file = os.path.join(snapshot_dir, 'optimizer')
         self.losses_file = os.path.join(snapshot_dir, 'losses')
